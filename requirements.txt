@@ -1,4 +1,0 @@
-numpy==1.6.2
--e git+https://github.com/hrldcpr/hungarian@227aa0b85472f382ad332b623b8a11fb529daa14#egg=hungarian-dev
-docopt==0.6.1
-pandas==0.12.0
