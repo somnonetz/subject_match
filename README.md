@@ -2,59 +2,56 @@ Subject Matching Tool
 ========================================
 
 This is a command line tool for finding the best matching controls for a group
-of patients using Minimum Weighted Bipartite Matching.
+of patients.
 
-Description
------------
-When matching patients with controls the aim is to minimize the differences
-between the two groups. One method is to match each patient to the closest
-control, which may not result in the minimal overall differnce. A different
-approach, aimed at minimizing the sum of differences between each subject and
-its matched control can be performed using the minimum weighted bipartite
-matching algorithm.
+ matches patients and controls according age and gender
 
-Installation
-------------
-Clone the repository:
-    git clone git@github.com/msscully/subject_match
+```
+ cli:
+   cwlVersion: v1.0-extended
+   class: pythonclass
+   baseCommand: result = subject_match_class.SubjectMatch(patients_df,controls_df,max_yeardiff)
 
-Create a virtualenv
-If using [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/en/latest/) (And you should be!) 
-    mkvirtualenv subject_match
+   inputs:
+     patients_df:
+       type: pandas.DataFrame
+       inputBinding:
+           position: 0
+       doc: "pandas dataframe with colums ['subjectID','age','gender'], age in years, gender='m','f','o','u'"
+     controls_df:
+       type: pandas.DataFrame
+       inputBinding:
+         position: 1
+       doc: "pandas dataframe with colums ['subjectID','age','gender'], age in years, gender='m','f','o','u'"
+     max_yeardiff:
+       type: int?
+       inputBinding:
+         positions: 2
+       doc: "acceptable devation from age in year in both directions, default = 2"
+   outputs:
+     results.matching:
+       type: pandas.DataFrame
+       doc: ""pandas dataframe with colums 'patientID', 'age_p', 'gender_p','controlID', 'age_c', 'gender_c']."
 
-Otherwise
+   s:author:
+     - class: s:Person
+       s:identifier:  https://orcid.org/0000-0002-7238-5339
+       s:email: mailto:dagmar.krefting@htw-berlin.de
+       s:name: Dagmar Krefting
+ 
+   s:dateCreated: "2019-07-19"
+   s:license: https://spdx.org/licenses/Apache-2.0 
+ 
+   s:keywords: edam:topic_3063, edam:topic_2082
+     doc: 3063: medical informatics, 2082: matrix
+   s:programmingLanguage: python3
+ 
+   $namespaces:
+     s: https://schema.org/
+     edam: http://edamontology.org/
+ 
+   $schemas:
+     - https://schema.org/docs/schema_org_rdfa.html
+     - http://edamontology.org/EDAM_1.18.owl
 
-    cd subject_match
-    virtualenv env
-    source env/bin/activate
-
-Install dependencies
-
-    pip install -r requirements.txt
-
-And you're good to go!
-
-Usage
------
-subject_match.py -c <controls.csv> -p <patients.csv>
-subject_match.py -c <controls.csv> -p <patients.csv> -d <delimitter>
-subject_match.py --controls <controls.csv> --patients <patients.csv>
-
--h --help                   Show this screen.
--c <file> --controls=<file> The file containing a csv of control subject data.
--p <file> --patients=<file> The file containing a csv of patient subject data.
--d <delimiter>              The delimiter used in the csv file.  [default: ,]
---version                   Show version.
-
-A list of "<patient_id> matches <control_id>" will be printed to stdout.
-
-The input files should have the form:
-
-    id,var1,var2,var3
-    frank,0,23,100
-    tim,0,44,98
-    
-License
--------
-
-Released under MIT license. See LICENSE
+```
